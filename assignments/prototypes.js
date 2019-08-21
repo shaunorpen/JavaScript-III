@@ -89,6 +89,40 @@ console.log(mike.stomach);
 
 */
 
+function Car2 (make, model) {
+  this.make = make;
+  this.model = model;
+  this.odometer = 0;
+  this.isCrashed = false;
+}
+
+Car2.prototype.drive = function (distance) {
+  if (this.isCrashed) {
+    return console.log(`I crashed at ${this.odometer} miles!`);
+  } else {
+    this.odometer += distance;
+  }
+}
+
+Car2.prototype.crash = function () {
+  this.isCrashed = true;
+}
+
+Car2.prototype.repair = function () {
+  this.isCrashed = false;
+}
+
+let myCar2 = new Car2 ('Ford', 'Pontiac');
+console.log(myCar2);
+myCar2.drive(100);
+console.log(myCar2);
+myCar2.crash();
+myCar2.drive(10);
+console.log(myCar2);
+myCar2.repair();
+myCar2.drive(100);
+console.log(myCar2);
+
 /*
 
   TASK 3
