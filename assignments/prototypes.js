@@ -46,6 +46,10 @@
   - Give persons the ability to poop.
   - When pooping, the stomach should empty.
 
+*/
+
+/*
+
   TASK 2
 
   - Build a Car constructor that takes model name and make.
@@ -56,12 +60,20 @@
   - Give cars the ability to be repaired.
   - A repaired car can be driven again.
 
+*/
+
+/*
+
   TASK 3
 
   - Build a Baby constructor that subclasses the Person built earlier.
   - Babies of course inherit the ability to greet, which can be strange.
   - Babies should have the ability to play, which persons don't.
   - By playing, a string is returned with some text of your choosing.
+
+*/
+
+/*
 
   TASK 4
 
