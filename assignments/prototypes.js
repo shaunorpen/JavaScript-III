@@ -158,6 +158,48 @@ myBaby.play();
 
 */
 
+// 1
+
+function buildBuilding (type, numberOfFloors, numberOfParkingSpaces) {
+  this.type = type;
+  this.numberOfFloors = numberOfFloors;
+  this.numberOfParkingSpaces = numberOfParkingSpaces;
+}
+
+buildBuilding.prototype.description = function () {
+  return `This ${this.type} has ${this.numberOfFloors} floors and ${this.numberOfParkingSpaces} parking spaces.`
+}
+
+let building = new buildBuilding('block of flats', 3, 6);
+console.log(building);
+console.log(building.description());
+
+// 2
+
+function buildHouse (type = 'house', numberOfFloors = 1, numberOfParkingSpaces = 2) {
+  buildBuilding.call(this, type, numberOfFloors, numberOfParkingSpaces);
+  this.isInhabited = true;
+}
+
+buildHouse.prototype = Object.create(buildBuilding.prototype);
+
+let house = new buildHouse ();
+console.log(house);
+console.log(house.description());
+
+// 3
+
+function buildShed (type = 'shed', numberOfFloors = 1, numberOfParkingSpaces = 0) {
+  buildBuilding.call(this, type, numberOfFloors, numberOfParkingSpaces)
+  this.isInhabited = false;
+}
+
+buildShed.prototype = Object.create(buildBuilding.prototype);
+
+let shed = new buildShed();
+console.log(shed);
+console.log(shed.description());
+
 /*
 
   STRETCH TASK
