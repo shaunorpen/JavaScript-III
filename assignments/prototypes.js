@@ -48,6 +48,33 @@
 
 */
 
+function Person (name, age) {
+  this.name = name;
+  this.age = age;
+  this.stomach = [];
+}
+
+Person.prototype.greet = function () {
+  return `Hello I am ${this.name} and I am ${this.age} years old.`
+}
+
+Person.prototype.eat = function (edible) {
+  this.stomach.push(edible);
+}
+
+Person.prototype.poop = function () {
+  this.stomach = [];
+}
+
+let mike = new Person ('Mike', 25);
+console.log(mike.greet());
+console.log(mike.stomach);
+mike.eat('Banana');
+mike.eat('Pear');
+console.log(mike.stomach);
+mike.poop();
+console.log(mike.stomach);
+
 /*
 
   TASK 2
