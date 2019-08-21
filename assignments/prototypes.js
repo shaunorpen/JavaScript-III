@@ -134,6 +134,20 @@ console.log(myCar2);
 
 */
 
+function Baby (name, age) {
+  Person.call(this, name, age);
+}
+
+Baby.prototype = Object.create(Person.prototype);
+
+Baby.prototype.play = function () {
+  return console.log('Yada yada yada');
+}
+
+let myBaby = new Baby ('Ted', 0);
+console.log(myBaby);
+myBaby.play();
+
 /*
 
   TASK 4
