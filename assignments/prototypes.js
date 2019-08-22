@@ -46,6 +46,37 @@
   - Give persons the ability to poop.
   - When pooping, the stomach should empty.
 
+*/
+
+function Person (name, age) {
+  this.name = name;
+  this.age = age;
+  this.stomach = [];
+}
+
+Person.prototype.greet = function () {
+  return `Hello I am ${this.name} and I am ${this.age} years old.`
+}
+
+Person.prototype.eat = function (edible) {
+  this.stomach.push(edible);
+}
+
+Person.prototype.poop = function () {
+  this.stomach = [];
+}
+
+let mike = new Person ('Mike', 25);
+console.log(mike.greet());
+console.log(mike.stomach);
+mike.eat('Banana');
+mike.eat('Pear');
+console.log(mike.stomach);
+mike.poop();
+console.log(mike.stomach);
+
+/*
+
   TASK 2
 
   - Build a Car constructor that takes model name and make.
@@ -56,12 +87,68 @@
   - Give cars the ability to be repaired.
   - A repaired car can be driven again.
 
+*/
+
+function Car2 (make, model) {
+  this.make = make;
+  this.model = model;
+  this.odometer = 0;
+  this.isCrashed = false;
+}
+
+Car2.prototype.drive = function (distance) {
+  if (this.isCrashed) {
+    return console.log(`I crashed at ${this.odometer} miles!`);
+  } else {
+    this.odometer += distance;
+  }
+}
+
+Car2.prototype.crash = function () {
+  this.isCrashed = true;
+}
+
+Car2.prototype.repair = function () {
+  this.isCrashed = false;
+}
+
+let myCar2 = new Car2 ('Ford', 'Pontiac');
+console.log(myCar2);
+myCar2.drive(100);
+console.log(myCar2);
+myCar2.crash();
+myCar2.drive(10);
+console.log(myCar2);
+myCar2.repair();
+myCar2.drive(100);
+console.log(myCar2);
+
+/*
+
   TASK 3
 
   - Build a Baby constructor that subclasses the Person built earlier.
   - Babies of course inherit the ability to greet, which can be strange.
   - Babies should have the ability to play, which persons don't.
   - By playing, a string is returned with some text of your choosing.
+
+*/
+
+function Baby (name, age) {
+  Person.call(this, name, age);
+}
+
+Baby.prototype = Object.create(Person.prototype);
+
+Baby.prototype.play = function () {
+  return console.log('Yada yada yada');
+}
+
+let myBaby = new Baby ('Ted', 0);
+console.log(myBaby);
+myBaby.play();
+
+/*
 
   TASK 4
 
@@ -70,6 +157,48 @@
   complicated one with lots of state. Surprise us!
 
 */
+
+// 1
+
+function buildBuilding (type, numberOfFloors, numberOfParkingSpaces) {
+  this.type = type;
+  this.numberOfFloors = numberOfFloors;
+  this.numberOfParkingSpaces = numberOfParkingSpaces;
+}
+
+buildBuilding.prototype.description = function () {
+  return `This ${this.type} has ${this.numberOfFloors} floors and ${this.numberOfParkingSpaces} parking spaces.`
+}
+
+let building = new buildBuilding('block of flats', 3, 6);
+console.log(building);
+console.log(building.description());
+
+// 2
+
+function buildHouse (type = 'house', numberOfFloors = 1, numberOfParkingSpaces = 2) {
+  buildBuilding.call(this, type, numberOfFloors, numberOfParkingSpaces);
+  this.isInhabited = true;
+}
+
+buildHouse.prototype = Object.create(buildBuilding.prototype);
+
+let house = new buildHouse ();
+console.log(house);
+console.log(house.description());
+
+// 3
+
+function buildShed (type = 'shed', numberOfFloors = 1, numberOfParkingSpaces = 0) {
+  buildBuilding.call(this, type, numberOfFloors, numberOfParkingSpaces)
+  this.isInhabited = false;
+}
+
+buildShed.prototype = Object.create(buildBuilding.prototype);
+
+let shed = new buildShed();
+console.log(shed);
+console.log(shed.description());
 
 /*
 
@@ -90,12 +219,33 @@
   * destroy() // prototype method that returns: `${this.name} was removed from the game.`
 */
 
+function GameObject (obj) {
+  this.createdAt = obj.createdAt;
+  this.name = obj.name;
+  this.dimensions = obj.dimensions;
+}
+
+GameObject.prototype.destroy = function () {
+  return `${this.name} was removed from the game.`
+}
+
 /*
   === CharacterStats ===
   * healthPoints
   * takeDamage() // prototype method -> returns the string '<object name> took damage.'
   * should inherit destroy() from GameObject's prototype
 */
+
+function CharacterStats (obj) {
+  GameObject.call(this, obj)
+  this.healthPoints = obj.healthPoints;
+}
+
+CharacterStats.prototype = Object.create(GameObject.prototype);
+
+CharacterStats.prototype.takeDamage = function () {
+  return `${this.name} took damage.`
+}
 
 /*
   === Humanoid (Having an appearance or character resembling that of a human.) ===
@@ -107,6 +257,19 @@
   * should inherit takeDamage() from CharacterStats
 */
 
+function Humanoid (obj) {
+  CharacterStats.call(this, obj);
+  this.team = obj.team;
+  this.weapons = obj.weapons;
+  this.language = obj.language;
+}
+
+Humanoid.prototype = Object.create(CharacterStats.prototype);
+
+Humanoid.prototype.greet = function () {
+  return `${this.name} offers a greeting in ${this.language}.`
+}
+
 /*
   * Inheritance chain: GameObject -> CharacterStats -> Humanoid
   * Instances of Humanoid should have all of the same properties as CharacterStats and GameObject.
@@ -115,62 +278,61 @@
 
 // Test you work by un-commenting these 3 objects and the list of console logs below:
 
-/*
-  const mage = new Humanoid({
-    createdAt: new Date(),
-    dimensions: {
-      length: 2,
-      width: 1,
-      height: 1,
-    },
-    healthPoints: 5,
-    name: 'Bruce',
-    team: 'Mage Guild',
-    weapons: [
-      'Staff of Shamalama',
-    ],
-    language: 'Common Tongue',
-  });
-  const swordsman = new Humanoid({
-    createdAt: new Date(),
-    dimensions: {
-      length: 2,
-      width: 2,
-      height: 2,
-    },
-    healthPoints: 15,
-    name: 'Sir Mustachio',
-    team: 'The Round Table',
-    weapons: [
-      'Giant Sword',
-      'Shield',
-    ],
-    language: 'Common Tongue',
-  });
-  const archer = new Humanoid({
-    createdAt: new Date(),
-    dimensions: {
-      length: 1,
-      width: 2,
-      height: 4,
-    },
-    healthPoints: 10,
-    name: 'Lilith',
-    team: 'Forest Kingdom',
-    weapons: [
-      'Bow',
-      'Dagger',
-    ],
-    language: 'Elvish',
-  });
-  console.log(mage.createdAt); // Today's date
-  console.log(archer.dimensions); // { length: 1, width: 2, height: 4 }
-  console.log(swordsman.healthPoints); // 15
-  console.log(mage.name); // Bruce
-  console.log(swordsman.team); // The Round Table
-  console.log(mage.weapons); // Staff of Shamalama
-  console.log(archer.language); // Elvish
-  console.log(archer.greet()); // Lilith offers a greeting in Elvish.
-  console.log(mage.takeDamage()); // Bruce took damage.
-  console.log(swordsman.destroy()); // Sir Mustachio was removed from the game.
-*/
+
+const mage = new Humanoid({
+  createdAt: new Date(),
+  dimensions: {
+    length: 2,
+    width: 1,
+    height: 1,
+  },
+  healthPoints: 5,
+  name: 'Bruce',
+  team: 'Mage Guild',
+  weapons: [
+    'Staff of Shamalama',
+  ],
+  language: 'Common Tongue',
+});
+const swordsman = new Humanoid({
+  createdAt: new Date(),
+  dimensions: {
+    length: 2,
+    width: 2,
+    height: 2,
+  },
+  healthPoints: 15,
+  name: 'Sir Mustachio',
+  team: 'The Round Table',
+  weapons: [
+    'Giant Sword',
+    'Shield',
+  ],
+  language: 'Common Tongue',
+});
+const archer = new Humanoid({
+  createdAt: new Date(),
+  dimensions: {
+    length: 1,
+    width: 2,
+    height: 4,
+  },
+  healthPoints: 10,
+  name: 'Lilith',
+  team: 'Forest Kingdom',
+  weapons: [
+    'Bow',
+    'Dagger',
+  ],
+  language: 'Elvish',
+});
+console.log(mage.createdAt); // Today's date
+console.log(archer.dimensions); // { length: 1, width: 2, height: 4 }
+console.log(swordsman.healthPoints); // 15
+console.log(mage.name); // Bruce
+console.log(swordsman.team); // The Round Table
+console.log(mage.weapons); // Staff of Shamalama
+console.log(archer.language); // Elvish
+console.log(archer.greet()); // Lilith offers a greeting in Elvish.
+console.log(mage.takeDamage()); // Bruce took damage.
+console.log(swordsman.destroy()); // Sir Mustachio was removed from the game.
